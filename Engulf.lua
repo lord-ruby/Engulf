@@ -15,7 +15,7 @@ function Engulf.Editionfunc(mtype, sound, numfunc, all)
                 c, m, l, hn = G.GAME.hands["cry_None"].chips, G.GAME.hands["cry_None"].mult, localize("cry_None", "poker_hands") 
             end
             update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0 }, {chips = G.GAME.hands[hand].chips, mult = G.GAME.hands[hand].mult, level = G.GAME.hands[hand].level, handname = localize(hand, "poker_hands")})
-            update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0.1 }, {StatusText=true, chips = mtype.chips and mtype.type..number_format(num*amount), mult = mtype.mult and mtype.type..number_format(num*amount)})
+            update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0.1 }, {StatusText=true, chips = mtype.chips and mtype.type..number_format(Engulf.StackOP(num,amount, mtype.type)), mult = mtype.mult and mtype.type..number_format(Engulf.StackOP(num,amount, mtype.type))})
             update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 1 }, {chips = c, mult = m, level = l, handname = hn})
         end
     end
