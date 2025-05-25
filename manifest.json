@@ -1,0 +1,16 @@
+{
+    "name": "Engulf",
+    "id": "enf",
+    "version": "1.0.0",
+    "website_url": "",
+    "description": "An editioned planets system built from the ground up.",
+    "prefix": "enf",
+    "author": ["Ruby"],
+    "main_file": "Engulf.lua",
+    "priority": 0,
+    "badge_colour": "FE0001",
+    "dependencies": [
+    ],
+    "conflicts": [
+    ]
+}
