@@ -1,11 +1,11 @@
 Engulf = {}
 Engulf.config = SMODS.current_mod.config
 --SMODS.Atlas {key = "modicon",path = "icon.png",px = 34,py = 34,}:register()
-function Engulf.Editionfunc(mtype, sound, numfunc)
+function Engulf.Editionfunc(mtype, sound, numfunc, all)
     return function(card, hand, instant, amount, edition) 
         local num = numfunc(edition, card)
-        if mtype.chips then G.GAME.hands[hand].chips = Engulf.performop(G.GAME.hands[hand].chips, (num * amount), mtype.type) end
-        if mtype.mult then G.GAME.hands[hand].mult = Engulf.performop(G.GAME.hands[hand].mult, (num * amount), mtype.type) end
+        if mtype.chips then G.GAME.hands[hand].chips = Engulf.performop(G.GAME.hands[hand].chips, Engulf.StackOP(num,amount, mtype.type), mtype.type) end
+        if mtype.mult then G.GAME.hands[hand].mult = Engulf.performop(G.GAME.hands[hand].mult, Engulf.StackOP(num,amount, mtype.type), mtype.type) end
         if not instant then
             G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.9, func = function()
                 play_sound('tarot1');if card then card:juice_up(0.8, 0.5) end;G.TAROT_INTERRUPT_PULSE = nil;return true 
@@ -26,13 +26,6 @@ Engulf.SpecialFuncs = {
         for i, v in pairs(G.GAME.hands) do
             Engulf.EditionHand(card, i, card.edition, Engulf.config.stackeffects and amount or 1, true)
         end
-        local c, m, l, hn
-        if G.PROFILES[G.SETTINGS.profile].cry_none and G.GAME.hands["cry_None"].visible and G.GAME.blind and G.GAME.blind.blind_set then 
-            c, m, l, hn = G.GAME.hands["cry_None"].chips, G.GAME.hands["cry_None"].mult, localize("cry_None", "poker_hands") 
-        end
-        update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0 }, {chips = "...", mult = "...", level = "", handname = localize("k_all_hands")})
-        update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0.1 }, {StatusText=true, chips = mtype.chips and mtype.type..number_format(num*amount), mult = mtype.mult and mtype.type..number_format(num*amount)})
-        update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 1 }, {chips = c, mult = m, level = l, handname = hn})
     end
 }
 Engulf.EditionFuncs = {
@@ -139,6 +132,7 @@ function Engulf.performop(num1, num2, op)
     if op == "^" then return to_big(num1)^to_big(num2) end
     if type(op) == "number" then to_big(num1):arrow(op, num2) end
 end
+function Engulf.StackOP(num1, num2, op) if op == "^" then return to_big(num1)^to_big(num2) else return to_big(num1)*to_big(num2) end
 local level_up_handref = level_up_hand
 function level_up_hand(card, hand, instant, amount)
     level_up_handref(card, hand, instant, amount)
