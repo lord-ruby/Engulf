@@ -1,6 +1,6 @@
 Engulf = {}
 Engulf.config = SMODS.current_mod.config
---SMODS.Atlas {key = "modicon",path = "icon.png",px = 34,py = 34,}:register()
+SMODS.Atlas {key = "modicon",path = "icon.png",px = 34,py = 34,}:register()
 function Engulf.Editionfunc(mtype, sound, numfunc, all)
     return function(card, hand, instant, amount, edition) 
         local num = numfunc(edition, card)
