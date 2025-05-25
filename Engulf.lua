@@ -23,8 +23,10 @@ end
 AurinkoAddons = AurinkoAddons or {};AurinkoWhitelist = AurinkoWhitelist or {}
 Engulf.SpecialFuncs = {
     c_black_hole = function(card, hand, instant, amount)
-        for i, v in pairs(G.GAME.hands) do
-            Engulf.EditionHand(card, i, card.edition, Engulf.config.stackeffects and amount or 1, true)
+        if card.edition then
+            for i, v in pairs(G.GAME.hands) do
+                Engulf.EditionHand(card, i, card.edition, Engulf.config.stackeffects and amount or 1, true)
+            end
         end
     end
 }
