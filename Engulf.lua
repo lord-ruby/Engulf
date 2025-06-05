@@ -136,16 +136,16 @@ function Engulf.performop(num1, num2, op)
 end
 function Engulf.StackOP(num1, num2, op) if op == "^" or op == "X" then return to_big(num1)^to_big(num2) else return to_big(num1)*to_big(num2) end end
 local level_up_handref = level_up_hand
-function level_up_hand(card, hand, instant, amount)
-    level_up_handref(card, hand, instant, amount)
+function level_up_hand(card, hand, instant, amount,...)
+    level_up_handref(card, hand, instant, amount,...)
     if card.edition and to_big(amount or 1) > to_big(0) then
         if Engulf.SpecialFuncs[card.config.center.key] then 
         else Engulf.EditionHand(card, hand, card.edition, amount, instant) end end
 end
 local use_cardref = G.FUNCS.use_card
-G.FUNCS.use_card = function(e, mute, nosave)
+G.FUNCS.use_card = function(e, mute, nosave,...)
     local card = e.config.ref_table
-	use_cardref(e,mute,nosave)
+	use_cardref(e,mute,nosave,...)
     G.E_MANAGER:add_event(Event({
         trigger = "after",
         delay = 0.3,
@@ -162,8 +162,8 @@ function SMODS.injectItems(...)
     for i, v in pairs(AurinkoWhitelist) do Engulf.SpecialWhitelist[i]=v end
 end
 local ccr = create_card
-function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-    local card = ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
+    local card = ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
     if _type=="Planet" or Engulf.SpecialWhitelist[card.config.center.key] then
         local modifier = 4
         local edition = poll_edition('edi'..(key_append or '')..tostring(G.GAME.round_resets.ante), math.max(1, math.min(1 + ((G.GAME.round_resets.ante / 2) - 0.5), 10)) * modifier, true)
