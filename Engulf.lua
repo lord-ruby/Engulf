@@ -160,23 +160,23 @@ function SMODS.injectItems(...)
     loadmodsref(...)
     for i, v in pairs(AurinkoAddons) do if not Engulf.EditionFuncs["e_"..i] then Engulf.EditionFuncs["e_"..i]=v end end
     for i, v in pairs(AurinkoWhitelist) do Engulf.SpecialWhitelist[i]=v end
-end
-local ccr = create_card
-function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
-    local card = ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
-    if _type=="Planet" or Engulf.SpecialWhitelist[card.config.center.key] then
-        local modifier = 4
-        local edition = poll_edition('edi'..(key_append or '')..tostring(G.GAME.round_resets.ante), math.max(1, math.min(1 + ((G.GAME.round_resets.ante / 2) - 0.5), 10)) * modifier, true)
-        G.E_MANAGER:add_event(Event({
-            blocking = false,
-            blockable = false,
-            func = function()
-                card:set_edition(edition)
-                return true
-            end
-        }))
+    local ccr = create_card
+    function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
+        local card = ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
+        if _type=="Planet" or Engulf.SpecialWhitelist[card.config.center.key] then
+            local modifier = 4
+            local edition = poll_edition('edi'..(key_append or '')..tostring(G.GAME.round_resets.ante), math.max(1, math.min(1 + ((G.GAME.round_resets.ante / 2) - 0.5), 10)) * modifier, true)
+            G.E_MANAGER:add_event(Event({
+                blocking = false,
+                blockable = false,
+                func = function()
+                    card:set_edition(edition)
+                    return true
+                end
+            }))
+        end
+        return card
     end
-    return
 end
 
 local engulfConfigTab = function()
