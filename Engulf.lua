@@ -164,8 +164,7 @@ function SMODS.injectItems(...)
     function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
         local card = ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
         if _type=="Planet" or Engulf.SpecialWhitelist[card.config.center.key] then
-            local modifier = 4
-            local edition = poll_edition('edi'..(key_append or '')..tostring(G.GAME.round_resets.ante), math.max(1, math.min(1 + ((G.GAME.round_resets.ante / 2) - 0.5), 10)) * modifier, true)
+            local edition = poll_edition('edi'..(key_append or '')..tostring(G.GAME.round_resets.ante))
             G.E_MANAGER:add_event(Event({
                 blocking = false,
                 blockable = false,
