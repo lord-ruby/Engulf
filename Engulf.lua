@@ -62,7 +62,7 @@ Engulf.EditionFuncs = {
             update_hand_text({ delay = 1.3 }, { mult = G.GAME.hands[hand].mult, StatusText = true })
         end
     end,
-    e_cry_glitched = function()
+    e_cry_glitched = function(card, hand, instant, amount, edition)
         local modc = G.GAME.hands[hand].l_chips
         * Cryptid.log_random(
             pseudoseed("cry_aurinko_chips_misprint" .. G.GAME.round_resets.ante),
