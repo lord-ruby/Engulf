@@ -138,7 +138,7 @@ function Engulf.StackOP(num1, num2, op) if op == "^" or op == "X" then return to
 local level_up_handref = level_up_hand
 function level_up_hand(card, hand, instant, amount,...)
     level_up_handref(card, hand, instant, amount,...)
-    if card.edition and to_big(amount or 1) > to_big(0) then
+    if card and card.edition and to_big(amount or 1) > to_big(0) then
         if Engulf.SpecialFuncs[card.config.center.key] then 
         else Engulf.EditionHand(card, hand, card.edition, amount, instant) end end
 end
