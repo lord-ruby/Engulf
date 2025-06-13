@@ -57,7 +57,7 @@ function Engulf.EditionHand(card, hand, edition, amount, instant)
         if edition.eee_mult then Engulf.Editionfunc({mult=true,type=3}, "talisman_eeemult", function(edition) return edition.eee_mult end)(card, hand, instant, amount or 1, edition) end
         if edition.hyper_chips then Engulf.Editionfunc({chips=true,type=edition.hyper_chips[1]}, "talisman_eeechip", function(edition) return edition.hyper_chips[2] end)(card, hand, instant, amount or 1, edition) end
         if edition.hyper_mult then Engulf.Editionfunc({mult=true,type=edition.hyper_chips[1]}, "talisman_eeemult", function(edition) return edition.hyper_chips[2] end)(card, hand, instant, amount or 1, edition) end
-        if edition.repetitions then level_up_hand(card, hand, instant, edition.repetitions) end
+        if edition.repetitions or edition.retriggers then level_up_hand(card, hand, instant, edition.repetitions or edition.retriggers) end
     end
 end
 
