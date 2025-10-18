@@ -11,7 +11,7 @@ function Engulf.Editionfunc(mtype, sound, numfunc, all)
                 play_sound('tarot1');if card then card:juice_up(0.8, 0.5) end;G.TAROT_INTERRUPT_PULSE = nil;return true 
             end}))
             local c, m, l, hn
-            if G.PROFILES[G.SETTINGS.profile].cry_none and G.GAME.hands["cry_None"].visible and G.GAME.blind and G.GAME.blind.blind_set then 
+            if G.PROFILES[G.SETTINGS.profile].cry_none and G.GAME.hands["cry_None"] and G.GAME.hands["cry_None"].visible and G.GAME.blind and G.GAME.blind.blind_set then
                 c, m, l, hn = G.GAME.hands["cry_None"].chips, G.GAME.hands["cry_None"].mult, localize("cry_None", "poker_hands") 
             end
             update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0 }, {chips = G.GAME.hands[hand].chips, mult = G.GAME.hands[hand].mult, level = G.GAME.hands[hand].level, handname = localize(hand, "poker_hands")})
