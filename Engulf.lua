@@ -14,9 +14,18 @@ function Engulf.Editionfunc(mtype, sound, numfunc, all)
             if G.PROFILES[G.SETTINGS.profile].cry_none and G.GAME.hands["cry_None"] and G.GAME.hands["cry_None"].visible and G.GAME.blind and G.GAME.blind.blind_set then
                 c, m, l, hn = G.GAME.hands["cry_None"].chips, G.GAME.hands["cry_None"].mult, localize("cry_None", "poker_hands") 
             end
-            update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0 }, {chips = G.GAME.hands[hand].chips, mult = G.GAME.hands[hand].mult, level = G.GAME.hands[hand].level, handname = localize(hand, "poker_hands")})
-            update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0.1 }, {StatusText=true, chips = mtype.chips and mtype.type..number_format(Engulf.StackOP(num,amount, mtype.type)), mult = mtype.mult and mtype.type..number_format(Engulf.StackOP(num,amount, mtype.type))})
-            update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 1 }, {chips = c, mult = m, level = l, handname = hn})
+            update_hand_text({ volume = 0.7, pitch = 0.9, delay = 0 }, {chips = G.GAME.hands[hand].chips, mult = G.GAME.hands[hand].mult, level = G.GAME.hands[hand].level, handname = localize(hand, "poker_hands")})
+            local text = mtype.type..number_format(Engulf.StackOP(num,amount, mtype.type))
+            if mtype == "+" and num < 0 then text = "-"..number_format(Engulf.StackOP(num,amount, mtype.type)) end
+            update_hand_text({ sound = sound, volume = 0.7, pitch = 0.9, delay = 0.1 }, {
+                StatusText=true, 
+                chips = mtype.chips and text, 
+                mult = mtype.mult and text
+            })
+            delay(0.7)
+            update_hand_text({ volume = 0.7, pitch = 0.9, delay = 0 }, {chips = G.GAME.hands[hand].chips, mult = G.GAME.hands[hand].mult, level = G.GAME.hands[hand].level, handname = localize(hand, "poker_hands")})
+            delay(1.5)
+            update_hand_text({ volume = 0.7, pitch = 1.5, delay = 1 }, {chips = c or 0, mult = m or 0, level = l or "", handname = hn or ""})
         end
     end
 end
@@ -35,20 +44,33 @@ Engulf.EditionFuncs = {
     e_holo = Engulf.Editionfunc({mult=true,type="+"}, "multhit1", function(edition) return edition.mult end),
     e_polychrome = Engulf.Editionfunc({mult=true,type="X"}, "multhit2", function(edition) return edition.x_mult end),
 }
+Engulf.SpecialCards = {
+
+}
 local level_up_handref = level_up_hand
 function level_up_hand(card, hand, instant, amount,...)
+    Engulf.active = true
     level_up_handref(card, hand, instant, amount,...)
-    if card and card.edition and to_big(amount or 1) > to_big(0) then
-        if Engulf.SpecialFuncs[card.config.center.key] then 
-        else Engulf.EditionHand(card, hand, card.edition, math.min(amount or 1, Engulf.config.stackeffects and 1 or amount), instant) end 
+    if card and card.edition and to_big(amount or 1) > to_big(0) and not Engulf.lock then
+        Engulf.lock = true
+        Engulf.EditionHand(card, hand, amount)
+        G.E_MANAGER:add_event(Event{
+            trigger = "after",
+            blocking = false,
+            func = function()
+                Engulf.lock = nil
+                return true
+            end
+        })
     end
 end
 Engulf.SpecialWhitelist = {}
 function Engulf.EditionHand(card, hand, edition, amount, instant)
+    edition = edition or card.edition
     if Engulf.EditionFuncs[edition.key] then Engulf.EditionFuncs[edition.key](card, hand, instant, Engulf.config.stackeffects and amount or 1, edition) else
         if edition.chips then Engulf.Editionfunc({chips=true,type="+"}, "chips1", function(edition) return edition.chips end)(card, hand, instant, amount or 1, edition) end
         if edition.mult then Engulf.Editionfunc({mult=true,type="+"}, "multhit1", function(edition) return edition.mult end)(card, hand, instant, amount or 1, edition) end
-        if edition.x_chips then Engulf.Editionfunc({chips=true,type="X"}, Talisman and "talisman_xchips" or "cry_xchip", function(edition) return edition.x_chips end)(card, hand, instant, amount or 1, edition) end
+        if edition.x_chips then Engulf.Editionfunc({chips=true,type="X"}, "xchips", function(edition) return edition.x_chips end)(card, hand, instant, amount or 1, edition) end
         if edition.x_mult then Engulf.Editionfunc({mult=true,type="X"}, "multhit2", function(edition) return edition.x_mult end)(card, hand, instant, amount or 1, edition) end
         if edition.e_chips then Engulf.Editionfunc({chips=true,type="^"}, Talisman and "talisman_echip" or "cry_echips", function(edition) return edition.e_chips end)(card, hand, instant or 1, amount, edition) end
         if edition.e_mult then Engulf.Editionfunc({mult=true,type="^"}, Talisman and "talisman_emult" or "cry_emult", function(edition) return edition.e_mult end)(card, hand, instant, amount or 1, edition) end
@@ -68,20 +90,61 @@ function Engulf.performop(num1, num2, op)
     if op == "^" then return to_big(num1)^to_big(num2) end
     if type(op) == "number" then to_big(num1):arrow(op, num2) end
 end
-function Engulf.StackOP(num1, num2, op) if op == "^" or op == "X" or type(op) == "number" then return to_big(num1)^to_big(num2) else return to_big(num1)*to_big(num2) end end
+
+function Engulf.StackOP(num1, num2, op) 
+    if op == "^" or op == "X" or type(op) == "number" then 
+        return to_big(num1)^to_big(num2) 
+    else 
+        local base = num1
+        if num2 < 1000 then
+            if num2 > 1 then
+                for i = 1, num2 - 1 do num1 = Engulf.performop(num1, base, op) end
+            end
+        end
+        return to_big(num1)*to_big(num2) 
+    end 
+end
 local use_cardref = G.FUNCS.use_card
 G.FUNCS.use_card = function(e, mute, nosave,...)
     local card = e.config.ref_table
 	use_cardref(e,mute,nosave,...)
+    Engulf.lock = true
     G.E_MANAGER:add_event(Event({
         trigger = "after",
         delay = 0.3,
         func = function()
-            if Engulf.SpecialFuncs[card.config.center.key] then Engulf.SpecialFuncs[card.config.center.key] (card, hand, instant, amount) end
+            if Engulf.SpecialCards[card.config.center.key] then
+                local hands = {}
+                local ret = Engulf.SpecialCards[card.config.center.key]
+                if type(ret) == "function" then ret = ret(card) end
+                if type(ret) == "string" then ret = {ret} end
+                for i, v in pairs(ret) do
+                    Engulf.ForceEditionHand(card, v, 1)
+                end
+            end
+            if Engulf.SpecialFuncs[card.config.center.key] then 
+                Engulf.SpecialFuncs[card.config.center.key] (card, hand, instant, amount) 
+            end
             return true
         end
     }))
+    G.E_MANAGER:add_event(Event{
+        trigger = "after",
+        blocking = false,
+        func = function()
+            Engulf.lock = nil
+            return true
+        end
+    })
 end
+
+function Engulf.ForceEditionHand(card, handname, amount, instant)
+    if not card or not card.edition or not G.GAME.hands[handname] then return end
+    if Engulf.SpecialFuncs[card.config.center.key] then 
+    else Engulf.EditionHand(card, handname, card.edition, math.min(amount or 1, Engulf.config.stackeffects and 1 or amount or 1), instant) end 
+
+end
+
 local loadmodsref = SMODS.injectItems
 function SMODS.injectItems(...)
     loadmodsref(...)
