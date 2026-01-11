@@ -67,6 +67,7 @@ end
 Engulf.SpecialWhitelist = {}
 function Engulf.EditionHand(card, hand, edition, amount, instant)
     edition = edition or card.edition
+    if type(edition) ~= "table" then return end
     if Engulf.EditionFuncs[edition.key] then Engulf.EditionFuncs[edition.key](card, hand, instant, Engulf.config.stackeffects and amount or 1, edition) else
         if edition.chips then Engulf.Editionfunc({chips=true,type="+"}, "chips1", function(edition) return edition.chips end)(card, hand, instant, amount or 1, edition) end
         if edition.mult then Engulf.Editionfunc({mult=true,type="+"}, "multhit1", function(edition) return edition.mult end)(card, hand, instant, amount or 1, edition) end
@@ -128,6 +129,9 @@ G.FUNCS.use_card = function(e, mute, nosave,...)
             return true
         end
     }))
+    if Engulf.SpecialCards[card.config.center.key] then
+        delay(1) 
+    end
     G.E_MANAGER:add_event(Event{
         trigger = "after",
         blocking = false,
