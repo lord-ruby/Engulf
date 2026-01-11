@@ -91,7 +91,7 @@ function Engulf.performop(num1, num2, op)
     if op == "+" then return to_big(num1)+to_big(num2) end
     if op == "X" then return to_big(num1)*to_big(num2) end
     if op == "^" then return to_big(num1)^to_big(num2) end
-    if type(op) == "number" then to_big(num1):arrow(op, num2) end
+    if type(op) == "number" then return to_big(num1):arrow(op, num2) end
 end
 
 function Engulf.StackOP(num1, num2, op) 
