@@ -11,9 +11,9 @@ Engulf.ApplyEditionFuncs["add_chips"] = function(card, hand, instant, amount, de
 			play_sound('chips1')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hc((card.edition[detected_key] > 0 and '+' or '-')..number_format(math.abs(card.edition[detected_key] * amount)), true)
+	    Engulf.hc((card.edition[detected_key] > 0 and '+' or '-')..number_format(math.abs(card.edition[detected_key] * amount)), true)
 	    delay(0.2)
-	    may.hc(number_format(G.GAME.hands[hand].chips), false)
+	    Engulf.hc(number_format(G.GAME.hands[hand].chips), false)
 		delay(0.7)
 	end
 end
@@ -27,9 +27,9 @@ Engulf.ApplyEditionFuncs["x_chips"] = function(card, hand, instant, amount, dete
 			play_sound('xchips')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hc('X'..number_format(math.abs(card.edition[detected_key] ^ amount)), true)
+	    Engulf.hc('X'..number_format(math.abs(card.edition[detected_key] ^ amount)), true)
 	    delay(0.2)
-	    may.hc(number_format(G.GAME.hands[hand].mult), false)
+	    Engulf.hc(number_format(G.GAME.hands[hand].mult), false)
 		delay(0.7)
 	end
 end
@@ -44,9 +44,9 @@ Engulf.ApplyEditionFuncs["e_chips"] = function(card, hand, instant, amount, dete
 			play_sound(Talisman and 'talisman_echip' or 'xchips')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hc('^'..number_format(math.abs(card.edition[detected_key] ^ factor)), true)
+	    Engulf.hc('^'..number_format(math.abs(card.edition[detected_key] ^ factor)), true)
 	    delay(0.2)
-	    may.hc(number_format(G.GAME.hands[hand].chips), false)
+	    Engulf.hc(number_format(G.GAME.hands[hand].chips), false)
 		delay(0.7)
 	end
 end
@@ -62,9 +62,9 @@ Engulf.ApplyEditionFuncs["ee_chips"] = function(card, hand, instant, amount, det
 			play_sound(Talisman and 'talisman_eechip' or 'xchips')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hc('^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
+	    Engulf.hc('^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
 	    delay(0.2)
-	    may.hc(number_format(G.GAME.hands[hand].chips), false)
+	    Engulf.hc(number_format(G.GAME.hands[hand].chips), false)
 		delay(0.7)
 	end
 end
@@ -80,9 +80,9 @@ Engulf.ApplyEditionFuncs["eee_chips"] = function(card, hand, instant, amount, de
 			play_sound(Talisman and 'talisman_eeechip' or 'xchips')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hc('^^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
+	    Engulf.hc('^^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
 	    delay(0.2)
-	    may.hc(number_format(G.GAME.hands[hand].chips), false)
+	    Engulf.hc(number_format(G.GAME.hands[hand].chips), false)
 		delay(0.7)
 	end
 end
@@ -98,9 +98,9 @@ Engulf.ApplyEditionFuncs["hyper_chips"] = function(card, hand, instant, amount, 
 			play_sound(Talisman and Engulf.OperationSound('chips', card.edition[detected_key][1]) or 'xchips')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hc(Engulf.OperationText(card.edition[detected_key][1])..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
+	    Engulf.hc(Engulf.OperationText(card.edition[detected_key][1])..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
 	    delay(0.2)
-	    may.hc(number_format(G.GAME.hands[hand].chips), false)
+	    Engulf.hc(number_format(G.GAME.hands[hand].chips), false)
 		delay(0.7)
 	end
 end
@@ -114,9 +114,9 @@ Engulf.ApplyEditionFuncs["add_mult"] = function(card, hand, instant, amount, det
 			play_sound('multhit1')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hm((card.edition[detected_key] > 0 and '+' or '-')..number_format(math.abs(card.edition[detected_key] * amount)), true)
+	    Engulf.hm((card.edition[detected_key] > 0 and '+' or '-')..number_format(math.abs(card.edition[detected_key] * amount)), true)
 	    delay(0.2)
-	    may.hm(number_format(G.GAME.hands[hand].mult), false)
+	    Engulf.hm(number_format(G.GAME.hands[hand].mult), false)
 		delay(0.7)
 	end
 end 
@@ -130,9 +130,9 @@ Engulf.ApplyEditionFuncs["x_mult"] = function(card, hand, instant, amount, detec
 			play_sound('multhit2')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hm('X'..number_format(math.abs(card.edition[detected_key] ^ amount)), true)
+	    Engulf.hm('X'..number_format(math.abs(card.edition[detected_key] ^ amount)), true)
 	    delay(0.2)
-	    may.hm(number_format(G.GAME.hands[hand].mult), false)
+	    Engulf.hm(number_format(G.GAME.hands[hand].mult), false)
 		delay(0.7)
 	end
 end
@@ -147,9 +147,9 @@ Engulf.ApplyEditionFuncs["e_mult"] = function(card, hand, instant, amount, detec
 			play_sound(Talisman and 'talisman_emult' or 'multhit2')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hm('^'..number_format(math.abs(card.edition[detected_key] ^ factor)), true)
+	    Engulf.hm('^'..number_format(math.abs(card.edition[detected_key] ^ factor)), true)
 	    delay(0.2)
-	    may.hm(number_format(G.GAME.hands[hand].mult), false)
+	    Engulf.hm(number_format(G.GAME.hands[hand].mult), false)
 		delay(0.7)
 	end
 end
@@ -165,9 +165,9 @@ Engulf.ApplyEditionFuncs["ee_mult"] = function(card, hand, instant, amount, dete
 			play_sound(Talisman and 'talisman_eemult' or 'xmult')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hm('^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
+	    Engulf.hm('^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
 	    delay(0.2)
-	    may.hm(number_format(G.GAME.hands[hand].mult), false)
+	    Engulf.hm(number_format(G.GAME.hands[hand].mult), false)
 		delay(0.7)
 	end
 end
@@ -183,9 +183,9 @@ Engulf.ApplyEditionFuncs["eee_mult"] = function(card, hand, instant, amount, det
 			play_sound(Talisman and 'talisman_eeemult' or 'multhit2')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hm('^^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
+	    Engulf.hm('^^^'..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
 	    delay(0.2)
-	    may.hm(number_format(G.GAME.hands[hand].mult), false)
+	    Engulf.hm(number_format(G.GAME.hands[hand].mult), false)
 		delay(0.7)
 	end
 end
@@ -201,9 +201,9 @@ Engulf.ApplyEditionFuncs["hyper_mult"] = function(card, hand, instant, amount, d
 			play_sound(Talisman and Engulf.OperationSound('mult', card.edition[detected_key][1]) or 'multhit2')
 		    if card then card:juice_up(0.8, 0.5) end
 	    return true end}))
-	    may.hm(Engulf.OperationText(card.edition[detected_key][1])..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
+	    Engulf.hm(Engulf.OperationText(card.edition[detected_key][1])..number_format(math.abs(card.edition[detected_key])..' ('..number_format(math.floor(amount))..'X)'), true)
 	    delay(0.2)
-	    may.hm(number_format(G.GAME.hands[hand].mult), false)
+	    Engulf.hm(number_format(G.GAME.hands[hand].mult), false)
 		delay(0.7)
 	end
 end
