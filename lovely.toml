@@ -6,13 +6,11 @@ priority = -1
 [[patches]]
 [patches.pattern]
 target = '''=[SMODS _ "src/utils.lua"]'''
-pattern = "update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, vals_after_level or {mult = 0, chips = 0, handname = '', level = ''})"
+pattern = "if not instant then delay(1.3) end"
 position = "before"
 payload = '''
-if args.level_up and args.from.edition then
-    for k, v in ipairs(args.hands) do
-		Engulf.ApplyEdition(args.from, v, args.level_up or 1, args.instant)
-	end 
+if args.level_up and args.from and args.from.edition and not Engulf.table_contains(Engulf.EditionBlacklist, args.from.edition.key) then
+	Engulf.ApplyEdition(args.from, hand, args.level_up or 1, instant) 
 end
 '''
 match_indent = true
@@ -23,9 +21,9 @@ target = '''=[SMODS _ "src/utils.lua"]'''
 pattern = "if not instant and not displayed then"
 position = "before"
 payload = '''
-if args.instant and args.level_up and args.from.edition then
+if instant and args.level_up and args.from and args.from.edition and not Engulf.table_contains(Engulf.EditionBlacklist, args.from.edition.key) then
     for k, v in ipairs(args.hands) do
-		Engulf.ApplyEdition(args.from, v, args.level_up or 1, args.instant)
+		Engulf.ApplyEdition(args.from, v, args.level_up or 1, instant)
 	end
 end
 '''

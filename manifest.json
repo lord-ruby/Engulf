@@ -1,15 +1,15 @@
 {
     "name": "Engulf",
     "id": "enf",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "website_url": "",
-    "description": "An editioned planets system built from the ground up.",
+    "description": "An editioned Planets system built from the ground up.",
     "prefix": "enf",
     "author": ["Ruby"],
     "main_file": "Engulf.lua",
     "priority": 0,
     "badge_colour": "FE0001",
     "dependencies": [
-		"Steamodded(>=1.0.0~BETA-0827c)"
+		"Steamodded(>=1.0.0~BETA-1024a)"
     ]
 }

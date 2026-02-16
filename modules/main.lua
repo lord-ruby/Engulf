@@ -13,7 +13,11 @@ Engulf.TargetHandFuncs = Engulf.TargetHandFuncs or {}
 
 Engulf.EditionFuncs = Engulf.EditionFuncs or {}
 
-local function table_contains(tab, item)
+Engulf.EditionBlacklist = Engulf.EditionBlacklist or {}
+
+Engulf.CardBlacklist = Engulf.CardBlacklist or {}
+
+function Engulf.table_contains(tab, item)
 	for k, v in pairs(tab) do
 		if v == item then 
 			return true
@@ -38,7 +42,7 @@ function SMODS.injectItems(...)
     local ccr = create_card
     function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
         local card = ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append,...)
-        if table_contains(Engulf.AllowedSets, card:gc().set) or table_contains(Engulf.AllowedKeys, card:gc().key) then
+        if Engulf.table_contains(Engulf.AllowedSets, card:gc().set) or Engulf.table_contains(Engulf.AllowedKeys, card:gc().key) and not Engulf.table_contains(Engulf.CardBlacklist, card:gc().key) then
             local edition = poll_edition('edi'..(key_append or '')..tostring(G.GAME.round_resets.ante))
             if edition then
                 G.E_MANAGER:add_event(Event({blocking = false, blockable = false, func = function()
@@ -54,7 +58,9 @@ end
 
 -- List of acceptable keys in Edition's config
 -- Each item is a table: {KEY, FUNCTION, PRIORITY}
-Engulf.GenericKeys = {
+Engulf.GenericKeys = Engulf.GenericKeys or {}
+
+for k, v in ipairs({
 	{'chips', 'add_chips', 1}, {'chips_mod', 'add_chips', 1}, 
 	{'x_chips', 'x_chips', 2}, {'xchips', 'x_chips', 2}, {'Xchips', 'x_chips', 2}, {'Xchips_mod', 'x_chips', 2}, 
 	{'e_chips', 'e_chips', 3}, {'echips', 'e_chips', 3}, {'Echips', 'e_chips', 3}, {'Echips_mod', 'e_chips', 3}, 
@@ -69,11 +75,13 @@ Engulf.GenericKeys = {
 	{'eee_mult', 'eee_mult', 5}, {'eeemult', 'eee_mult', 5}, {'EEEmult', 'eee_mult', 5}, {'EEEmult_mod', 'eee_mult', 5}, 
 	{'hyper_mult', 'hyper_mult', 6}, {'hypermult', 'hyper_mult', 6},
 	
-	{'p_dollars', 'dollars', 1}, {'h_dollars', 'dollars', 201}, {'dollars', 'dollars', 201}, {'money', 'dollars', 201}, 
-}
+	{'p_dollars', 'dollars', 1}, {'h_dollars', 'dollars', 201}, {'dollars', 'dollars', 201}, {'money', 'dollars', 201}
+}) do
+	table.insert(Engulf.GenericKeys, v)
+end
 
 function Engulf.ApplyEdition(card, hand, amount, instant, cosmetic)
-	if table_contains(Engulf.AllowedSets, card:gc().set) or table_contains(Engulf.AllowedKeys, card:gc().key) then
+	if Engulf.table_contains(Engulf.AllowedSets, card:gc().set) or Engulf.table_contains(Engulf.AllowedKeys, card:gc().key) then
 		local to_apply = {}
 		local applied = {}
 		if Engulf.SpecialCardFuncs[card:gc().key] then 
@@ -130,7 +138,7 @@ local use_cardref = G.FUNCS.use_card
 G.FUNCS.use_card = function(e, mute, nosave,...)
     local card = e.config.ref_table
 	use_cardref(e, mute, nosave,...)
-	if card.edition and card:gc().set ~= 'Planet' and (table_contains(Engulf.AllowedSets, card:gc().set) or table_contains(Engulf.AllowedKeys, card:gc().key)) then
+	if card.edition and card:gc().set ~= 'Planet' and (Engulf.table_contains(Engulf.AllowedSets, card:gc().set) or Engulf.table_contains(Engulf.AllowedKeys, card:gc().key)) then
 		if Engulf.TargetHandFuncs[card:gc().key] then
 			Engulf.th(Engulf.TargetHandFuncs[card:gc().key](card))
 			Engulf.ApplyEdition(card, Engulf.TargetHandFuncs[card:gc().key](card), card:getQty(), false)
