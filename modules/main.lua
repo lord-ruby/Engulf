@@ -26,10 +26,6 @@ function Engulf.table_contains(tab, item)
 	return false
 end
 
--- Fix Mult/Chips resetting when hand is leveled up
-SMODS.Scoring_Parameter:take_ownership('mult', {level_up_hand = function(self, amount, hand) hand[self.key] = math.max(hand[self.key] + (hand['l_'..self.key] * amount), 1) end})
-SMODS.Scoring_Parameter:take_ownership('chips', {level_up_hand = function(self, amount, hand) hand[self.key] = math.max(hand[self.key] + (hand['l_'..self.key] * amount), 1) end})
-
 local loadmodsref = SMODS.injectItems
 function SMODS.injectItems(...)
     loadmodsref(...)
